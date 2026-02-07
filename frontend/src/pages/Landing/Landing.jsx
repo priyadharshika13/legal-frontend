@@ -33,7 +33,7 @@ export default function Landing() {
         <p style={styles.p}>{t('landingSub')}</p>
 
         <div style={styles.actions}>
-          <button style={styles.primary} onClick={() => navigate('/login')}>
+          <button style={styles.primary} onClick={() => navigate('/Dashboard')}>
             {t('getStarted')}
           </button>
           <button style={styles.secondary} onClick={() => navigate('/login')}>
