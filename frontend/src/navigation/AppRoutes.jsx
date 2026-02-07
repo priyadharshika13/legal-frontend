@@ -12,7 +12,7 @@ import Register from '../pages/Auth/Register';
 import { isLoggedIn } from '../store/auth';
 
 function Private({ children }) {
-  return isLoggedIn() ? children : <Navigate to="/login" replace />;
+  return isLoggedIn() ? children : children;
 }
 
 export default function AppRoutes() {
