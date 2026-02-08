@@ -2,12 +2,16 @@ import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import LangToggle from '../components/LangToggle';
+import { useProduct } from '../core/ProductProvider';
+import { getProductList } from '../config/productConfig';
 import { clearAuth, getAuth } from '../store/auth';
 
 export default function Sidebar() {
   const { t } = useTranslation();
   const nav = useNavigate();
   const auth = getAuth();
+  const { productId, config, setProductId, tenantControlled } = useProduct();
+  const productList = getProductList();
 
   const logout = () => {
     clearAuth();
@@ -17,11 +21,37 @@ export default function Sidebar() {
   return (
     <aside style={styles.aside}>
       <div style={styles.brandRow}>
-        <div style={styles.logo}>⚖️</div>
+        <img src="/ai_legal_logo.png" alt="Logo" style={styles.logoImg} />
         <div>
-          <div style={styles.title}>{t('appName')}</div>
+          <div style={styles.title}>{config?.nameShort || t('appName')}</div>
           <div style={styles.sub}>{t('tagline')}</div>
         </div>
+      </div>
+
+      <div style={styles.productSwitcher}>
+        <span style={styles.productLabel}>{t('legalFramework', 'Legal framework')}</span>
+        {tenantControlled ? (
+          <div style={styles.productReadOnly}>
+            {config?.nameShort || (productId === 'saudi' ? 'Saudi Legal' : 'India Legal')}
+          </div>
+        ) : (
+          <div style={styles.productButtons}>
+            {productList.map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => setProductId(p.id)}
+                style={{
+                  ...styles.productBtn,
+                  borderColor: productId === p.id ? '#F5C76A' : '#2a2b33',
+                  color: productId === p.id ? '#F5C76A' : '#A0A0A0',
+                }}
+              >
+                {p.name}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       <div style={styles.userBox}>
@@ -35,9 +65,15 @@ export default function Sidebar() {
 
       <nav style={styles.nav}>
         <NavItem to="/dashboard" label={t('navDashboard')} />
+        <NavItem to="/laws" label={t('navLaws', 'Laws')} />
         <NavItem to="/case-intake" label={t('navCaseIntake')} />
+        <NavItem to="/cases/create" label={t('navCases', 'Cases')} />
         <NavItem to="/draft" label={t('navDraft')} />
+        <NavItem to="/drafting/templates" label={t('navDrafting', 'Drafting')} />
+        <NavItem to="/research" label={t('navResearch', 'Research')} />
+        <NavItem to="/research/workspace" label={t('navResearchWorkspace', 'Research workspace')} />
         <NavItem to="/judgments" label={t('navJudgments')} />
+        <NavItem to="/admin" label={t('navAdmin', 'Admin')} />
       </nav>
 
       <div style={styles.bottom}>
@@ -78,6 +114,7 @@ const styles = {
     top: 0,
   },
   brandRow: { display: 'flex', alignItems: 'center', gap: 10 },
+  logoImg: { width: 40, height: 40, objectFit: 'contain', borderRadius: 20 },
   logo: {
     width: 40,
     height: 40,
@@ -90,6 +127,19 @@ const styles = {
   title: { fontWeight: 900, letterSpacing: 1, textTransform: 'uppercase', fontSize: 13, color: '#F5F5F5' },
   sub: { color: '#A0A0A0', fontSize: 11 },
 
+  productSwitcher: { marginTop: 4 },
+  productLabel: { fontSize: 11, color: '#A0A0A0', display: 'block', marginBottom: 6 },
+  productReadOnly: { fontSize: 13, fontWeight: 800, color: '#F5C76A' },
+  productButtons: { display: 'flex', gap: 8, flexWrap: 'wrap' },
+  productBtn: {
+    padding: '6px 10px',
+    borderRadius: 10,
+    border: '1px solid #2a2b33',
+    background: '#050507',
+    fontSize: 12,
+    fontWeight: 800,
+    cursor: 'pointer',
+  },
   userBox: {
     border: '1px solid #2a2b33',
     background: '#050507',

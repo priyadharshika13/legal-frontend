@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AppLayout from '../../layout/AppLayout';
-import { generateWritDraftApi } from '../../services/api/draft';
+import { generateWritDraftApi, generateCounterDraftApi, generateLegalNoticeDraftApi } from '../../services/api/draft';
 
 const ALL_ARTICLES = [
   '14', '19', '20', '21', '21A', '22', '23', '24', '25', '26', '29', '30',
@@ -52,17 +52,10 @@ export default function Draft() {
   };
 
   const onGenerate = async () => {
-    // For now only writ endpoint is wired
-    if (draftType !== 'writ') {
-      resetOutputs();
-      setOutput(`"${draftLabel}" API not connected yet. Use Writ for now.`);
-      return;
-    }
-
     const cleanFacts = facts.trim();
     if (!cleanFacts || cleanFacts.length < 20) {
       // Don’t spam user with alerts during auto mode
-      return;
+      if (draftType === 'writ') return;
     }
 
     // avoid overlapping responses (latest wins)
@@ -71,30 +64,65 @@ export default function Draft() {
 
     setBusy(true);
     try {
-      const payload = {
-        court,
-        jurisdiction, // 226 or 32
-        petitioner: petitioner || null,
-        respondent: respondent || null,
-        facts: cleanFacts,
-        reliefs: [],
-        opponent_points: null,
-        previous_judgments: [],
-        language: lang,
-
-        // ✅ NEW: send involved constitutional articles
-        constitutional_articles: articles,
-      };
-
-      const res = await generateWritDraftApi(payload);
-      if (lastRequestRef.current !== reqId) return; // ignore old response
-
-      const data = res.data || {};
-      setOutput(data?.writ_petition || '');
-      setNotes(data?.notes || '');
-
-      setNegative((data?.negative_points || []).map((x, i) => `${i + 1}. ${x}`).join('\n'));
-      setMissing((data?.missing_info || []).map((x, i) => `${i + 1}. ${x}`).join('\n'));
+      if (draftType === 'writ') {
+        const payload = {
+          court,
+          jurisdiction: jurisdiction === '32' ? '32' : '226',
+          petitioner: petitioner || null,
+          respondent: respondent || null,
+          facts: cleanFacts,
+          reliefs: [],
+          opponent_points: null,
+          previous_judgments: [],
+          language: lang,
+        };
+        const res = await generateWritDraftApi(payload);
+        if (lastRequestRef.current !== reqId) return;
+        const data = res.data || {};
+        setOutput(data?.writ_petition || '');
+        setNotes(data?.notes || '');
+        setNegative((data?.negative_points || []).map((x, i) => `${i + 1}. ${x}`).join('\n'));
+        setMissing((data?.missing_info || []).map((x, i) => `${i + 1}. ${x}`).join('\n'));
+      } else if (draftType === 'counter') {
+        const payload = {
+          court,
+          jurisdiction: jurisdiction === '32' ? '32' : '226',
+          petitioner: petitioner || 'Petitioner',
+          respondent: respondent || 'Respondent',
+          petition_summary: cleanFacts,
+          facts_from_respondent: cleanFacts,
+          preliminary_objections: [],
+          previous_judgments: [],
+          language: lang,
+        };
+        const res = await generateCounterDraftApi(payload);
+        if (lastRequestRef.current !== reqId) return;
+        const data = res.data || {};
+        setOutput(data?.counter_affidavit || '');
+        setNotes(data?.notes || '');
+        setNegative((data?.negative_points || []).map((x, i) => `${i + 1}. ${x}`).join('\n'));
+        setMissing((data?.missing_info || []).map((x, i) => `${i + 1}. ${x}`).join('\n'));
+      } else if (draftType === 'notice') {
+        const payload = {
+          matter_type: 'General',
+          sender_name: petitioner || 'Sender',
+          sender_address: '',
+          receiver_name: respondent || 'Receiver',
+          receiver_address: '',
+          facts: cleanFacts,
+          demands: ['As per facts above'],
+          notice_period_days: 15,
+          language: lang,
+          tone: 'firm',
+        };
+        const res = await generateLegalNoticeDraftApi(payload);
+        if (lastRequestRef.current !== reqId) return;
+        const data = res.data || {};
+        setOutput(data?.legal_notice || '');
+        setNotes(data?.notes || '');
+        setNegative((data?.negative_points || []).map((x, i) => `${i + 1}. ${x}`).join('\n'));
+        setMissing((data?.missing_info || []).map((x, i) => `${i + 1}. ${x}`).join('\n'));
+      }
     } catch (e) {
       if (lastRequestRef.current !== reqId) return;
       const msg = e?.response?.data?.detail || e?.message || 'Draft generation failed';

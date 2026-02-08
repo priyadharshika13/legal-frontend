@@ -1,0 +1,48 @@
+{
+  "productId": "india",
+  "name": "India Legal Intelligence",
+  "nameShort": "India Legal",
+  "jurisdiction": "IN",
+  "defaultLanguage": "en",
+  "languages": ["en", "hi", "ta"],
+  "rtl": false,
+  "ai": {
+    "tone": "case-law",
+    "limits": {
+      "noAdvice": true,
+      "noOutcomePrediction": true,
+      "noActionSuggestions": true,
+      "noProbabilities": true,
+      "noClientRepresentationTone": true
+    },
+    "caseAnalysisDepth": "precedent-heavy",
+    "draftingBehaviour": "reference-only",
+    "allowedFeatures": ["summarization", "amendmentExplanation", "issueSpotting", "precedentTrendAnalysis"],
+    "disallowedFeatures": ["chatbot", "freeTextLegalQuestions", "outcomePrediction"]
+  },
+  "caseAnalysis": {
+    "emphasis": "precedent",
+    "languageStyle": "Courts have considered... / Commonly examined factors... / Judicial trends indicate...",
+    "precedentReasoning": "emphasized"
+  },
+  "drafting": {
+    "templateBasedOnly": true,
+    "citationPriority": "high"
+  },
+  "citation": {
+    "priority": "high",
+    "lawCitation": true,
+    "caseCitation": true,
+    "footnotes": true
+  },
+  "collaboration": {
+    "reviewFlowRequired": false,
+    "roles": ["Researcher", "Lawyer", "Reviewer", "Admin"]
+  },
+  "disclaimer": {
+    "platform": "This platform provides legal research assistance only. It does not constitute legal advice. AI outputs require human verification. For use in India jurisdiction only.",
+    "aiLabel": "AI-assisted legal research notes (for reference only)",
+    "caseAnalysis": "This case analysis is for research only. It does not constitute legal advice. Courts have considered similar factors in past decisions; outcomes depend on facts and judicial discretion.",
+    "drafting": "Drafting assistance is reference-only. No validation of legality. Human verification required."
+  }
+}

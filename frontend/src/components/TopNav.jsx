@@ -9,7 +9,7 @@ export default function TopNav() {
   return (
     <div style={styles.wrap}>
       <div style={styles.brand}>
-        <div style={styles.logo}>⚖️</div>
+        <img src="/ai_legal_logo.png" alt="Logo" style={styles.logoImg} />
         <div>
           <div style={styles.title}>{t('appName')}</div>
           <div style={styles.sub}>{t('tagline')}</div>
@@ -55,6 +55,7 @@ const styles = {
     background: '#111218',
   },
   brand: { display: 'flex', alignItems: 'center', gap: 10 },
+  logoImg: { width: 36, height: 36, objectFit: 'contain', borderRadius: 18 },
   logo: {
     width: 36,
     height: 36,

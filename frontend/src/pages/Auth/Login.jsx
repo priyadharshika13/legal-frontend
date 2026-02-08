@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import LangToggle from '../../components/LangToggle';
-import { loginApi } from '../../services/api/auth';
+import { loginApi, meApi } from '../../services/api/auth';
 import { saveAuth } from '../../store/auth';
 
 export default function Login() {
@@ -31,16 +31,28 @@ export default function Login() {
       // If backend not ready, you can temporarily comment this and use demo payload.
       const res = await loginApi({ tenantCode, email, password });
 
-      // Expected: res.data = { token, user, tenantCode }
       saveAuth({
         token: res.data.access_token,
-        user: res.data.user || { name: email.split('@')[0] },
-        tenantCode: res.data.tenantCode || tenantCode,
+        user: { name: email.split('@')[0], email },
+        tenantCode: tenantCode,
       });
+
+      const meRes = await meApi();
+      const product = meRes.data?.product;
+      const jurisdiction = meRes.data?.jurisdiction;
+      if (product) {
+        saveAuth({
+          token: res.data.access_token,
+          user: { name: email.split('@')[0], email },
+          tenantCode,
+          tenantProduct: product,
+          tenantJurisdiction: jurisdiction,
+        });
+      }
 
       nav('/dashboard');
     } catch (e2) {
-      setErr(e2?.response?.data?.message || e2.message || 'Login failed');
+      setErr(e2?.response?.data?.detail || e2?.response?.data?.message || e2.message || 'Login failed');
     } finally {
       setLoading(false);
     }
@@ -50,7 +62,7 @@ export default function Login() {
     <div style={styles.page}>
       <div style={styles.header}>
         <div style={styles.brand}>
-          <div style={styles.logo}>⚖️</div>
+          <img src="/ai_legal_logo.png" alt="Logo" style={styles.logoImg} />
           <div>
             <div style={styles.title}>{t('appName')}</div>
             <div style={styles.sub}>{t('tagline')}</div>
@@ -82,6 +94,7 @@ const styles = {
   page: { minHeight: '100vh', background: 'radial-gradient(circle at top, #1f1f25 0%, #050507 55%)', color: '#F5F5F5', padding: 24, fontFamily: 'system-ui, sans-serif' },
   header: { display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
   brand: { display: 'flex', alignItems: 'center', gap: 10 },
+  logoImg: { width: 40, height: 40, objectFit: 'contain', borderRadius: 20 },
   logo: { width: 40, height: 40, borderRadius: 20, display: 'grid', placeItems: 'center', background: '#111218', border: '1px solid #f5c76a55' },
   title: { fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase', fontSize: 14 },
   sub: { color: '#A0A0A0', fontSize: 12 },

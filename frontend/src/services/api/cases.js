@@ -1,13 +1,18 @@
 import { api } from './client';
 
-
-// 1) Save intake
+// 1) Create case (intake)
 export const intakeCaseApi = (payload) => api.post("/cases/intake", payload);
 
-// 2) Get case details
+// 2) List cases (backend: GET /cases?limit=50, no offset)
+export const listCasesApi = (limit = 50) => api.get("/cases", { params: { limit } });
+
+// 3) Get case details
 export const getCaseApi = (caseId) => api.get(`/cases/${caseId}`);
 
-// 3) Upload ONE file to case
+// 4) Update case (PATCH; supports status and all CaseIntakeUpdate fields)
+export const updateCaseApi = (caseId, payload) => api.patch(`/cases/${caseId}`, payload);
+
+// 5) Upload one file to case (backend expects form key "file")
 export const uploadCaseFileApi = (caseId, file) => {
   const fd = new FormData();
   fd.append("file", file);
@@ -17,7 +22,7 @@ export const uploadCaseFileApi = (caseId, file) => {
   });
 };
 
-// 4) Upload MULTIPLE files (client side loop)
+// 6) Upload MULTIPLE files (client-side loop)
 export const uploadCaseFilesApi = async (caseId, files, onProgress) => {
   const results = [];
   for (let i = 0; i < files.length; i++) {
@@ -43,5 +48,5 @@ export const uploadCaseFilesApi = async (caseId, files, onProgress) => {
   return results;
 };
 
-// 5) Run AI (optional button)
+// 7) Run AI on case
 export const runCaseAiApi = (caseId) => api.post(`/cases/${caseId}/ai`);

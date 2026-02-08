@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import LangToggle from '../../components/LangToggle';
-import { registerApi } from '../../services/api/auth';
+import { registerApi, meApi } from '../../services/api/auth';
 import { saveAuth } from '../../store/auth';
 
 export default function Register() {
@@ -30,23 +30,36 @@ export default function Register() {
     try {
       setLoading(true);
 
+      const backendRole = role === 'ADMIN' ? 'admin' : role === 'LAWYER' ? 'lawyer' : 'CLIENT';
       const res = await registerApi({
         tenantCode,
         email,
         password,
         full_name: fullName,
-        role,
+        role: backendRole,
       });
 
       const token = res.data?.access_token;
       if (!token) throw new Error('No access_token received');
 
-      // store token + tenant in localStorage (same structure used by axios client)
       saveAuth({
         token,
         tenantCode,
         user: { name: fullName, role, email },
       });
+
+      const meRes = await meApi();
+      const product = meRes.data?.product;
+      const jurisdiction = meRes.data?.jurisdiction;
+      if (product) {
+        saveAuth({
+          token,
+          tenantCode,
+          user: { name: fullName, role, email },
+          tenantProduct: product,
+          tenantJurisdiction: jurisdiction,
+        });
+      }
 
       nav('/dashboard');
     } catch (e2) {
@@ -60,7 +73,7 @@ export default function Register() {
     <div style={styles.page}>
       <div style={styles.header}>
         <div style={styles.brand}>
-          <div style={styles.logo}>⚖️</div>
+          <img src="/ai_legal_logo.png" alt="Logo" style={styles.logoImg} />
           <div>
             <div style={styles.title}>{t('appName')}</div>
             <div style={styles.sub}>{t('tagline')}</div>
@@ -134,6 +147,7 @@ const styles = {
   },
   header: { display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
   brand: { display: 'flex', alignItems: 'center', gap: 10 },
+  logoImg: { width: 40, height: 40, objectFit: 'contain', borderRadius: 20 },
   logo: {
     width: 40,
     height: 40,

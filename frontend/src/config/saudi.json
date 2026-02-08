@@ -1,0 +1,52 @@
+{
+  "productId": "saudi",
+  "name": "Saudi Arabia Legal & Regulatory Intelligence",
+  "nameShort": "Saudi Legal",
+  "jurisdiction": "SA",
+  "defaultLanguage": "ar",
+  "languages": ["ar", "en"],
+  "rtl": true,
+  "ai": {
+    "tone": "conservative",
+    "limits": {
+      "noAdvice": true,
+      "noOutcomePrediction": true,
+      "noActionSuggestions": true,
+      "noProbabilities": true,
+      "noClientRepresentationTone": true
+    },
+    "caseAnalysisDepth": "statute-focused",
+    "draftingBehaviour": "reference-only",
+    "allowedFeatures": ["summarization", "amendmentExplanation", "issueSpotting"],
+    "disallowedFeatures": ["chatbot", "freeTextLegalQuestions", "outcomePrediction", "precedentTrendAnalysis"]
+  },
+  "caseAnalysis": {
+    "emphasis": "statute-and-regulation",
+    "languageStyle": "Conservative wording. Statute and regulation focused. No hype.",
+    "precedentReasoning": "secondary"
+  },
+  "drafting": {
+    "templateBasedOnly": true,
+    "citationPriority": "reference-only"
+  },
+  "citation": {
+    "priority": "reference-only",
+    "lawCitation": true,
+    "caseCitation": false,
+    "footnotes": true
+  },
+  "collaboration": {
+    "reviewFlowRequired": true,
+    "roles": ["Researcher", "Reviewer", "Approver", "Admin"]
+  },
+  "disclaimer": {
+    "platform": "هذه المنصة تقدم مساعدة بحث قانوني وتنظيمي فقط. لا تشكل استشارة قانونية. مخرجات الذكاء الاصطناعي تتطلب تحققاً بشرياً. للاستخدام في نطاق المملكة العربية السعودية فقط.",
+    "platformEn": "This platform provides legal and regulatory research assistance only. It does not constitute legal advice. AI outputs require human verification. For use in the Kingdom of Saudi Arabia only.",
+    "aiLabel": "ملاحظات بحث قانوني بمساعدة الذكاء الاصطناعي (للمرجع فقط)",
+    "aiLabelEn": "AI-assisted legal research notes (for reference only)",
+    "caseAnalysis": "تحليل القضية للمرجع فقط. لا يشكل استشارة قانونية. التحقق البشري مطلوب.",
+    "caseAnalysisEn": "Case analysis is for reference only. It does not constitute legal advice. Human verification required.",
+    "drafting": "مساعدة الصياغة للمرجع فقط. لا التحقق من الشرعية. التحقق البشري مطلوب.",
+    "draftingEn": "Drafting assistance is reference-only. No validation of legality. Human verification required."
+  }
+}

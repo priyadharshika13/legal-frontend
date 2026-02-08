@@ -6,6 +6,7 @@ export async function uploadCaseFilesApi({ caseId, files }) {
   files.forEach((f) => fd.append('files', f));
 
   // POST /api/files/upload/
+  // NOTE: Backend app has no /api/files/* routes; these will 404 until implemented.
   return api.post('/api/files/upload/', fd, {
     headers: { 'Content-Type': 'multipart/form-data' },
   });

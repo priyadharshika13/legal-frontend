@@ -10,7 +10,7 @@ import {
   runCaseAiApi,
 } from "../../services/api/cases";
 
-export default function CaseIntake() {
+export function CaseIntakeForm() {
   const { t, i18n } = useTranslation();
 
   const [form, setForm] = useState({
@@ -169,7 +169,7 @@ export default function CaseIntake() {
   };
 
   return (
-    <AppLayout title={t("caseIntakeTitle")}>
+    <>
       <div style={styles.grid}>
         <div style={styles.card}>
           <div style={styles.cardTitle}>{t("clientDetails")}</div>
@@ -320,6 +320,15 @@ export default function CaseIntake() {
         <label style={styles.label}>Possible Laws / Punishments</label>
         <textarea style={styles.textarea} rows={5} value={ai.possibleLaws} readOnly />
       </div>
+    </>
+  );
+}
+
+export default function CaseIntake() {
+  const { t } = useTranslation();
+  return (
+    <AppLayout title={t('caseIntakeTitle')}>
+      <CaseIntakeForm />
     </AppLayout>
   );
 }

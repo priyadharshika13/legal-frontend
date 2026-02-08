@@ -1,12 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import i18n from '../core/i18n';
 
+const LANGUAGES = ['en', 'ar', 'ta'];
+
 export default function LangToggle() {
-  const toggle = () => i18n.changeLanguage(i18n.language === 'en' ? 'ta' : 'en');
+  const current = i18n.language?.startsWith('ar') ? 'ar' : i18n.language?.startsWith('ta') ? 'ta' : 'en';
+
+  const cycle = () => {
+    const idx = LANGUAGES.indexOf(current);
+    const next = LANGUAGES[(idx + 1) % LANGUAGES.length];
+    i18n.changeLanguage(next);
+  };
+
+  useEffect(() => {
+    document.documentElement.lang = current;
+    document.documentElement.dir = current === 'ar' ? 'rtl' : 'ltr';
+  }, [current]);
 
   return (
     <button
-      onClick={toggle}
+      type="button"
+      onClick={cycle}
       style={{
         padding: '8px 12px',
         borderRadius: 999,
@@ -16,7 +30,7 @@ export default function LangToggle() {
         cursor: 'pointer',
       }}
     >
-      {i18n.language.toUpperCase()}
+      {current === 'ar' ? 'ع' : current === 'ta' ? 'TA' : 'EN'}
     </button>
   );
 }

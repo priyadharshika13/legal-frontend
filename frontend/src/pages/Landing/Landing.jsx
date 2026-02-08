@@ -9,38 +9,57 @@ export default function Landing() {
 
   return (
     <div style={styles.page}>
-      <div style={styles.header}>
+      <header style={styles.header}>
         <div style={styles.brand}>
-          <div style={styles.logo}>⚖️</div>
+          <img src="/ai_legal_logo.png" alt="" style={styles.logoImg} />
           <div>
-            <div style={styles.title}>{t('appName')}</div>
-            <div style={styles.sub}>{t('tagline')}</div>
+            <div style={styles.brandName}>{t('appName')}</div>
+            <div style={styles.brandTagline}>{t('tagline')}</div>
           </div>
         </div>
         <LangToggle />
-      </div>
+      </header>
 
-      <div style={styles.center}>
-        <div style={styles.orbit}>
-          <div style={styles.inner}>
-            <div style={{ fontSize: 56 }}>👼⚖️</div>
-            <div style={styles.angelTitle}>JUSTICE ANGEL</div>
-            <div style={styles.angelSub}>LAW · ETHICS · BALANCE</div>
+      <main>
+        <section style={styles.hero}>
+          <div style={styles.heroBadge}>Enterprise · Compliance-ready</div>
+          <h1 style={styles.heroTitle}>{t('landingHeroTitle')}</h1>
+          <p style={styles.heroSub}>{t('landingHeroSub')}</p>
+          <div style={styles.actions}>
+            <button style={styles.primary} onClick={() => navigate('/login')}>
+              {t('landingCtaGetStarted')}
+            </button>
+            <button style={styles.secondary} onClick={() => navigate('/create-tenant')}>
+              {t('landingCtaOrganization')}
+            </button>
+            <button style={styles.tertiary} onClick={() => navigate('/login')}>
+              {t('landingCtaLogin')}
+            </button>
           </div>
-        </div>
+        </section>
 
-        <h1 style={styles.h1}>{t('landingTitle')}</h1>
-        <p style={styles.p}>{t('landingSub')}</p>
+        <section style={styles.sections}>
+          <div style={styles.card}>
+            <div style={styles.cardAccent} />
+            <h2 style={styles.cardHead}>{t('landingEnterpriseHead')}</h2>
+            <p style={styles.cardBody}>{t('landingEnterpriseBody')}</p>
+          </div>
+          <div style={styles.card}>
+            <div style={styles.cardAccent} />
+            <h2 style={styles.cardHead}>{t('landingJurisdictionHead')}</h2>
+            <p style={styles.cardBody}>{t('landingJurisdictionBody')}</p>
+          </div>
+          <div style={styles.card}>
+            <div style={styles.cardAccent} />
+            <h2 style={styles.cardHead}>{t('landingPrivacyHead')}</h2>
+            <p style={styles.cardBody}>{t('landingPrivacyBody')}</p>
+          </div>
+        </section>
 
-        <div style={styles.actions}>
-          <button style={styles.primary} onClick={() => navigate('/Dashboard')}>
-            {t('getStarted')}
-          </button>
-          <button style={styles.secondary} onClick={() => navigate('/login')}>
-            {t('login')}
-          </button>
-        </div>
-      </div>
+        <footer style={styles.footer}>
+          <p style={styles.footerText}>{t('landingCtaAudience')}</p>
+        </footer>
+      </main>
     </div>
   );
 }
@@ -48,74 +67,142 @@ export default function Landing() {
 const styles = {
   page: {
     minHeight: '100vh',
-    background: 'radial-gradient(circle at top, #1f1f25 0%, #050507 55%)',
-    color: '#F5F5F5',
-    padding: 24,
-    fontFamily: 'system-ui, sans-serif',
+    background: 'linear-gradient(180deg, #0a0a0c 0%, #0d0d10 30%, #08080a 100%)',
+    color: '#e8e8ec',
+    fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    padding: '0 24px 48px',
   },
   header: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: 16,
+    padding: '20px 0',
+    maxWidth: 1100,
+    margin: '0 auto',
   },
-  brand: { display: 'flex', alignItems: 'center', gap: 10 },
-  logo: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    display: 'grid',
-    placeItems: 'center',
-    background: '#111218',
-    border: '1px solid #f5c76a55',
-  },
-  title: { fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase', fontSize: 14 },
-  sub: { color: '#A0A0A0', fontSize: 12 },
-  center: {
-    maxWidth: 760,
-    margin: '70px auto 0',
+  brand: { display: 'flex', alignItems: 'center', gap: 12 },
+  logoImg: { width: 40, height: 40, objectFit: 'contain', borderRadius: 8 },
+  brandName: { fontWeight: 700, letterSpacing: '0.02em', fontSize: 15, color: '#e8e8ec' },
+  brandTagline: { color: '#6b6b78', fontSize: 12, marginTop: 2 },
+  hero: {
+    maxWidth: 720,
+    margin: '0 auto',
+    padding: '72px 0 64px',
     textAlign: 'center',
   },
-  orbit: {
-    width: 280,
-    height: 280,
-    borderRadius: 999,
-    margin: '0 auto 22px',
-    background: '#111218',
-    border: '1px solid #f5c76a88',
-    display: 'grid',
-    placeItems: 'center',
+  heroBadge: {
+    display: 'inline-block',
+    fontSize: 11,
+    fontWeight: 600,
+    letterSpacing: '0.12em',
+    textTransform: 'uppercase',
+    color: '#b8a84a',
+    marginBottom: 20,
+    padding: '6px 12px',
+    border: '1px solid rgba(197, 177, 89, 0.35)',
+    borderRadius: 6,
   },
-  inner: {
-    width: 220,
-    height: 220,
-    borderRadius: 999,
-    border: '1px solid #F5C76A',
-    background: '#050507',
-    display: 'grid',
-    placeItems: 'center',
+  heroTitle: {
+    fontSize: 'clamp(28px, 4vw, 38px)',
+    fontWeight: 700,
+    lineHeight: 1.2,
+    letterSpacing: '-0.02em',
+    color: '#f2f2f6',
+    margin: '0 0 16px',
   },
-  angelTitle: { color: '#F5C76A', fontWeight: 800, letterSpacing: 3, fontSize: 13 },
-  angelSub: { color: '#A0A0A0', fontSize: 11, letterSpacing: 2, marginTop: 6 },
-  h1: { fontSize: 28, margin: '10px 0' },
-  p: { color: '#A0A0A0', lineHeight: 1.6, margin: '0 auto', maxWidth: 520 },
-  actions: { display: 'flex', justifyContent: 'center', gap: 10, marginTop: 18, flexWrap: 'wrap' },
+  heroSub: {
+    fontSize: 17,
+    lineHeight: 1.55,
+    color: '#9a9aa6',
+    maxWidth: 560,
+    margin: '0 auto 32px',
+  },
+  actions: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: 12,
+    flexWrap: 'wrap',
+  },
   primary: {
-    padding: '12px 18px',
-    borderRadius: 999,
-    background: '#F5C76A',
-    color: '#111',
+    padding: '14px 24px',
+    borderRadius: 8,
+    background: '#c5b159',
+    color: '#0a0a0c',
     border: 'none',
-    fontWeight: 800,
+    fontWeight: 600,
+    fontSize: 14,
     cursor: 'pointer',
+    letterSpacing: '0.02em',
   },
   secondary: {
-    padding: '12px 18px',
-    borderRadius: 999,
-    background: '#111218',
-    color: '#F5F5F5',
-    border: '1px solid #2a2b33',
-    fontWeight: 700,
+    padding: '14px 24px',
+    borderRadius: 8,
+    background: 'transparent',
+    color: '#e8e8ec',
+    border: '1px solid #2e2e36',
+    fontWeight: 600,
+    fontSize: 14,
     cursor: 'pointer',
+    letterSpacing: '0.02em',
+  },
+  tertiary: {
+    padding: '14px 24px',
+    borderRadius: 8,
+    background: 'transparent',
+    color: '#9a9aa6',
+    border: 'none',
+    fontWeight: 500,
+    fontSize: 14,
+    cursor: 'pointer',
+  },
+  sections: {
+    maxWidth: 1000,
+    margin: '0 auto',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+    gap: 24,
+    padding: '24px 0 56px',
+  },
+  card: {
+    position: 'relative',
+    padding: '24px 20px',
+    background: 'rgba(18, 18, 22, 0.8)',
+    border: '1px solid #25252d',
+    borderRadius: 12,
+  },
+  cardAccent: {
+    position: 'absolute',
+    top: 0,
+    left: 20,
+    width: 24,
+    height: 2,
+    background: 'linear-gradient(90deg, #c5b159 0%, transparent 100%)',
+    borderRadius: 1,
+  },
+  cardHead: {
+    fontSize: 16,
+    fontWeight: 600,
+    color: '#f2f2f6',
+    margin: '14px 0 8px',
+    letterSpacing: '-0.01em',
+  },
+  cardBody: {
+    fontSize: 14,
+    lineHeight: 1.5,
+    color: '#9a9aa6',
+    margin: 0,
+  },
+  footer: {
+    maxWidth: 560,
+    margin: '0 auto',
+    padding: '40px 0 24px',
+    textAlign: 'center',
+    borderTop: '1px solid #25252d',
+  },
+  footerText: {
+    fontSize: 13,
+    color: '#6b6b78',
+    margin: '24px 0 0',
+    lineHeight: 1.5,
   },
 };
